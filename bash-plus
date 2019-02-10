@@ -1,0 +1,33 @@
+#!/bin/bash
+if [[ -e $(dirname $(readlink $0))/lib.sh ]]; then
+  >&2 echo "Running from source directory, directly including lib.sh"
+  LIB_SCRIPT=$(cat $(dirname $(readlink $0))/lib.sh)
+else
+  >&2 echo "Running from compiled script, extracting"
+  # lib script has been compiled and and we need to extract it
+  # get the line that bash plus library ends in the current script
+  LINE_NO="$(grep -n "END_OF_BASH_PLUS" $0 | head -n 1 | cut -d: -f1)"
+  >&2 echo LINE_NO: $LINE_NO
+  LIB_SCRIPT=$(cat $0 | head -n $LINE_NO)
+fi
+
+
+script=$1
+mode=run
+if [[ "$1" == "compile" ]]; then
+  mode=compile
+  shift
+  script=$1
+fi
+
+>&2 echo "$(readlink $0) [$mode] $script"
+
+if [[ "$mode" == "compile" ]]; then
+  echo "$LIB_SCRIPT"
+  docker run -it --rm -e PROGRAM=argbash -v "$(PWD):$(PWD)" -w $(PWD) matejak/argbash $script -o .$script
+  cat .$script
+else
+  eval $("$LIB_SCRIPT")
+  docker run -it --rm -e PROGRAM=argbash -v "$(PWD):$(PWD)" -w $(PWD) matejak/argbash $script -o .$script
+  source .$script
+fi

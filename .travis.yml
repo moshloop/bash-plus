@@ -1,0 +1,14 @@
+language: python
+python:
+- 3.6.5
+script:
+  - make publish
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file_glob: true
+  file:
+    - "bash-plus"
+  skip_cleanup: true
+  on:
+    tags: true
