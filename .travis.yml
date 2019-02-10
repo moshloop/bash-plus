@@ -1,7 +1,11 @@
 language: python
 python:
 - 3.6.5
+sudo: required
+services:
+  - docker
 script:
+  - apt-get install -y moreutils
   - ./bash-plus compile bash-plus | sponge bash-plus
   - make publish
 deploy:

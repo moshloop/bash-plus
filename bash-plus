@@ -31,10 +31,10 @@ fi
 
 if [[ "$mode" == "compile" ]]; then
   echo "$LIB_SCRIPT"
-  docker run -it --rm -e PROGRAM=argbash -v "$(pwd):$(pwd)" -w $(PWD) matejak/argbash $script -o .$script
+  docker run -it --rm -e PROGRAM=argbash -v "$(pwd):$(pwd)" -w $(pwd) matejak/argbash $script -o .$script
   cat .$script
 else
   eval $("$LIB_SCRIPT")
-  docker run -it --rm -e PROGRAM=argbash -v "$(pwd):$(pwd)" -w $(PWD) matejak/argbash $script -o .$script
+  docker run -it --rm -e PROGRAM=argbash -v "$(pwd):$(pwd)" -w $(pwd) matejak/argbash $script -o .$script
   source .$script
 fi
