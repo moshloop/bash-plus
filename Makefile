@@ -7,7 +7,7 @@ else
 endif
 
 .PHONY: publish
-publish: build
+publish:
 	pip install twine
 	python setup.py sdist
 	twine upload dist/*.tar.gz || echo already exists
