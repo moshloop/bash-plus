@@ -1,7 +1,14 @@
 #!/bin/bash
-if [[ -e $(dirname $(readlink $0))/lib.sh ]]; then
+BASE=$(dirname $(readlink $0))
+if [[ "$BASE" == "" ]]; then
+  LIB_SH=lib.sh
+else
+  LIB_SH=$BASE/lib.sh
+fi
+>&2 echo 0: $0, LIB_SH: $LIB_SH
+if [[ -e $LIB_SH ]]; then
   >&2 echo "Running from source directory, directly including lib.sh"
-  LIB_SCRIPT=$(cat $(dirname $(readlink $0))/lib.sh)
+  LIB_SCRIPT=$(cat $LIB_SH)
 else
   >&2 echo "Running from compiled script, extracting"
   # lib script has been compiled and and we need to extract it

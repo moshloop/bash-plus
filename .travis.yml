@@ -2,6 +2,7 @@ language: python
 python:
 - 3.6.5
 script:
+  - ./bash-plus compile bash-plus > bash-plus
   - make publish
 deploy:
   provider: releases

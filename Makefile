@@ -6,12 +6,7 @@ else
   VERSION := $(shell git describe --abbrev=0 --tags)-debug
 endif
 
-.PHONY: build
-build:
-	# use bash-plus to build ourselves
-	./bash-plus compile bash-plus > bash-plus
-
-.PHONE: publish
+.PHONY: publish
 publish: build
 	pip install twine
 	python setup.py sdist
