@@ -6,6 +6,10 @@ else
   VERSION := $(shell git describe --abbrev=0 --tags)-debug
 endif
 
+.PHONY: build
+build:
+	./bash-plus bash-plus | sponge bash-plus
+
 .PHONY: publish
 publish:
 	pip install twine

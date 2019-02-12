@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ -e "lib.sh" ]]; then
+  source lib.sh
+fi
 BASE=$(dirname $(readlink $0))
 if [[ "$BASE" == "" ]]; then
   LIB_SH=lib.sh
@@ -14,27 +17,13 @@ else
   # lib script has been compiled and and we need to extract it
   # get the line that bash plus library ends in the current script
   LINE_NO="$(grep -n "END_OF_BASH_PLUS" $0 | head -n 1 | cut -d: -f1)"
-  >&2 echo LINE_NO: $LINE_NO
   LIB_SCRIPT=$(cat $0 | head -n $LINE_NO)
 fi
 
 
 script=$1
-mode=run
-if [[ "$1" == "compile" ]]; then
-  mode=compile
-  shift
-  script=$1
-fi
 
->&2 echo "$(readlink $0) [$mode] $script"
-
-if [[ "$mode" == "compile" ]]; then
-  echo "$LIB_SCRIPT"
-  docker run -it --rm -e PROGRAM=argbash -v "$(pwd):$(pwd)" -w $(pwd) matejak/argbash $script -o .$script
-  cat .$script
-else
-  eval $("$LIB_SCRIPT")
-  docker run -it --rm -e PROGRAM=argbash -v "$(pwd):$(pwd)" -w $(pwd) matejak/argbash $script -o .$script
-  source .$script
-fi
+echo "$LIB_SCRIPT"
+docker run -it --rm -e PROGRAM=argbash -v "$(pwd):$(pwd)" -w $(pwd) matejak/argbash $script -o .$script
+cat .$script | $sed 's|_arg_\(.*\)=|\1=|'
+rm .$script

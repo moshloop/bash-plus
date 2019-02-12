@@ -6,7 +6,6 @@ services:
   - docker
 script:
   - sudo apt-get install -y moreutils
-  - ./bash-plus compile bash-plus | sponge bash-plus
   - make publish
 deploy:
   provider: releases
