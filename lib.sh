@@ -97,11 +97,6 @@ is_mac(){
     fi
 }
 
-sed=sed
-if is_mac ; then
-  sed=gsed
-fi
-
 is_jenkins(){
     if [ -n "${JENKINS_URL:-}" ]; then
         return 0

@@ -22,6 +22,11 @@ fi
 
 
 script=$1
+sed=sed
+if is_mac ; then
+  sed=gsed
+fi
+
 
 echo "$LIB_SCRIPT"
 docker run -it --rm -e PROGRAM=argbash -v "$(pwd):$(pwd)" -w $(pwd) matejak/argbash $script -o .$script
