@@ -1,5 +1,6 @@
 #!/bin/bash
 ## START_OF_BASH_PLUS
+#start_region
 red="\033[38;5;196m"
 neutral='\033[0m'
 cyan='\033[00;34m'
@@ -33,12 +34,12 @@ success () {
 }
 
 logv() {
-  [[ "$debug" != "" ]] && log $1
+  [[ "$debug" != "" ]] && log "$1"
 }
 
 
 fatal () {
-  error $2
+  error $1 $2
   exit 1
 }
 
@@ -175,6 +176,7 @@ temp_cp() {
 }
 
 timestamp=$(date +%s)
+#end_region
 ## END_OF_BASH_PLUS
 script=$1
 BASH_PLUS=$0
@@ -203,6 +205,20 @@ function extract_bash_libs() {
   LINE_NO="$(cat $BASH_PLUS | awk '/END_OF_BASH_PLUS/{ print NR; exit }')"
   cat $BASH_PLUS | head -n $LINE_NO
 }
+
+function remove_argbash_codegen() {
+  START="$(cat $script | awk '/### START OF CODE GENERATED/{ print NR; exit }')"
+  END="$(cat $script | awk '/### END OF CODE GENERATED/{ print NR; exit }')"
+  cat $script | sed "$(expr $START + 1),$(expr $END - 1)d"
+}
+
+if [[ "$2" == "clean" ]]; then
+  remove_existing_bash_libs
+  remove_argbash_codegen
+  exit 0
+fi
+
+
 remove_existing_bash_libs
 extract_bash_libs
 
