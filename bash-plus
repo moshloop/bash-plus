@@ -118,7 +118,7 @@ is_travis(){
     fi
 }
 
-is_CI(){
+is_ci(){
     if [ -n "${CI:-}" -o -n "${CI_NAME:-}" ] || is_jenkins || is_travis; then
         return 0
     else
@@ -170,6 +170,7 @@ _do_delete_on_exit() {
   _delete_on_exit=()
 }
 _delete_on_exit=()
+
 temp_cp() {
   cp "$1" "$2"
   delete_on_exit "$2"
