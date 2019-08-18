@@ -125,6 +125,11 @@ is_ci(){
         return 1
     fi
 }
+
+get_git_version() {
+  echo "$(git describe --tags): $(git log -n1 --oneline)"
+}
+
 #===================================================================
 # FUNCTION trap_add ()
 #
@@ -225,5 +230,5 @@ extract_bash_libs
 
 docker run -it --rm -e PROGRAM=argbash -v "$(pwd):$(pwd)" -w $(pwd) matejak/argbash $script -o .$script
 # remove _arg_ prefix from all argument variables
-cat .$script | $sed 's|_arg_\(.*\)=|\1=|'
+cat .$script | $sed 's|_arg_\(.*\)=|\1=|' | $sed "s|_SCRIPT_VERSION_|$(get_git_version)|"
 rm -f .$script || true
